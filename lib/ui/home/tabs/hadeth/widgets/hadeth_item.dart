@@ -24,7 +24,9 @@ class _HadethItemState extends State<HadethItem> {
     }
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(RoutesManger.hadethDetailsRouteName,arguments: myHadeth);
+        Navigator.of(
+          context,
+        ).pushNamed(RoutesManger.hadethDetailsRouteName, arguments: myHadeth);
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -46,8 +48,8 @@ class _HadethItemState extends State<HadethItem> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(AssetsManger.leftCorner),
-                      Image.asset(AssetsManger.rightCorner),
+                      Image.asset(AssetsManger.hadethLeftCorner),
+                      Image.asset(AssetsManger.hadethRightCorner),
                     ],
                   ),
                   Text(
