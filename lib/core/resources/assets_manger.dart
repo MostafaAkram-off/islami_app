@@ -11,4 +11,9 @@ abstract class AssetsManger {
   static const String leftCorner = "assets/images/img_left_corner.png";
   static const String rightCorner = "assets/images/img_right_corner.png";
   static const String suraMosque = "assets/images/sura_mosque.png";
+  static const String hadethBack = "assets/images/hadeth_back.png";
+  static const String hadethMosque = "assets/images/hadeth_mosque.png";
+  static const String hadithCardBackGround = "assets/images/HadithCardBackGround 1.png";
+  static const String hadethLeftCorner = "assets/images/left_corner.png";
+  static const String hadethRightCorner = "assets/images/right_corner.png";
 }
