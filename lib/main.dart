@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/ui/hadeth_details/screen/hadeth_details_screen.dart';
 import 'package:islami_app/ui/home/screen/home_screen.dart';
+import 'package:islami_app/ui/sura_details/screen/sura_details_screen.dart';
 
 import 'core/resources/routes_manger.dart';
 
 void main() {
-  runApp(Islami());
+runApp(Islami());
 }
 
 class Islami extends StatelessWidget {
@@ -15,8 +16,10 @@ class Islami extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: {
+      routes:{
         RoutesManger.homeRouteName: (context) => const HomeScreen(),
+        RoutesManger.suraDetailsRouteName: (context) => const SuraDetailsScreen(),
+      } ,
         RoutesManger.hadethDetailsRouteName: (context) =>
             const HadethDetailsScreen(),
       },
