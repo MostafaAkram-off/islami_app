@@ -6,7 +6,7 @@ class TextStyles {
     Color textColor = ColorsManger.goldColor,
   }) {
     return TextStyle(
-      color: ColorsManger.goldColor,
+      color: textColor,
       fontWeight: FontWeight.w900,
       fontSize: 24,
       fontFamily: "Janna",
