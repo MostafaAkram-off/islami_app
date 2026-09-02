@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:islami_app/core/local/prefs_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
@@ -9,8 +10,17 @@ import 'package:islami_app/ui/home/tabs/quran/widgets/sura_item.dart';
 
 import 'widgets/most_recent_item.dart';
 
-class QuranTab extends StatelessWidget {
+class QuranTab extends StatefulWidget {
   const QuranTab({super.key});
+
+  @override
+  State<QuranTab> createState() => _QuranTabState();
+}
+
+class _QuranTabState extends State<QuranTab> {
+  String searchText = "";
+  List<SuraModel> filteredSuras = SuraModel.surasList;
+  List<SuraModel> mostRecent = PrefsManager.getMostRecent();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +49,14 @@ class QuranTab extends StatelessWidget {
             ),
             SizedBox(height: 20),
             TextFormField(
+              enabled: true,
+              onChanged: (value) {
+                setState(() {
+                  searchText = value;
+                  search();
+                });
+              },
+              style: TextStyles.largeBodyTextStyle(),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: ColorsManger.blackColor.withValues(alpha: 0.7),
@@ -69,20 +87,22 @@ class QuranTab extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Text(
-              StringsManger.mostRecently,
-              style: TextStyles.largeBodyTextStyle(),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) => MostRecentItem(),
-                separatorBuilder: (context, index) => SizedBox(width: 10),
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
+            if (searchText.isEmpty && mostRecent.isNotEmpty) ...[
+              Text(
+                StringsManger.mostRecently,
+                style: TextStyles.largeBodyTextStyle(),
               ),
-            ),
-            SizedBox(height: 10),
+              SizedBox(height: 10),
+              Expanded(
+                child: ListView.separated(
+                  itemBuilder: (context, index) => MostRecentItem(mostRecent[index]),
+                  separatorBuilder: (context, index) => SizedBox(width: 10),
+                  itemCount: mostRecent.length,
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+              SizedBox(height: 10),
+            ],
             Text(
               StringsManger.surasList,
               style: TextStyles.largeBodyTextStyle(),
@@ -92,15 +112,38 @@ class QuranTab extends StatelessWidget {
               flex: 2,
               child: ListView.separated(
                 itemBuilder: (context, index) =>
-                    SuraItem(SuraModel.surasList[index]),
+                    SuraItem(filteredSuras[index], () {
+                      setState(() {
+                        mostRecent.remove(filteredSuras[index]);
+                        mostRecent.insert(0, filteredSuras[index]);
+                        PrefsManager.saveMostRecent(mostRecent);
+                      });
+                    }),
                 separatorBuilder: (context, index) =>
                     Divider(color: ColorsManger.whiteColor),
-                itemCount: SuraModel.surasList.length,
+                itemCount: filteredSuras.length,
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void search() {
+    if (searchText.isNotEmpty) {
+      filteredSuras = SuraModel.surasList;
+      filteredSuras = filteredSuras
+          .where(
+            (sura) =>
+                sura.suraNameEn.toLowerCase().contains(
+                  searchText.trim().toLowerCase(),
+                ) ||
+                sura.suraNameAr.contains(searchText.trim()),
+          )
+          .toList();
+    } else {
+      filteredSuras = SuraModel.surasList;
+    }
   }
 }

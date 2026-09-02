@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/local/prefs_manager.dart';
 import 'package:islami_app/ui/hadeth_details/screen/hadeth_details_screen.dart';
 import 'package:islami_app/ui/home/screen/home_screen.dart';
 import 'package:islami_app/ui/sura_details/screen/sura_details_screen.dart';
 
 import 'core/resources/routes_manger.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await PrefsManager.init();
   runApp(Islami());
 }
 

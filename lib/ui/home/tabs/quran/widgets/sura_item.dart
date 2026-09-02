@@ -7,14 +7,15 @@ import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/sura_model.dart';
 
 class SuraItem extends StatelessWidget {
-  SuraModel sura;
-
-  SuraItem(this.sura);
+  final SuraModel sura;
+  final void Function() onClick;
+  const SuraItem(this.sura, this.onClick, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        onClick();
         Navigator.pushNamed(context, RoutesManger.suraDetailsRouteName,arguments: sura);
       },
       child: Row(
