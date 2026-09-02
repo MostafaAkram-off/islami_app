@@ -8,6 +8,14 @@ class PrefsManager {
     preferences = await SharedPreferences.getInstance();
   }
 
+  static Future<void> saveOnBoardingViewed() async {
+    await preferences.setBool("is_onboarding_viewed", true);
+  }
+
+  static bool getOnboardingViewed() {
+    return preferences.getBool("is_onboarding_viewed") ?? false;
+  }
+
   static saveMostRecent(List<SuraModel> mostRecent) {
     preferences.setStringList(
       "most_recent",
