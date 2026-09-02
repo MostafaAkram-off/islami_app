@@ -28,4 +28,13 @@ abstract class StringsManger {
   static const String next = "Next";
   static const String back = "Back";
   static const String finish = "Finish";
+
+  static const String sebhaAyah = "سَبِّحِ اسْمَ رَبِّكَ الأَعْلَى";
+
+  static const List<String> azkar = [
+    "سبحان الله",
+    "الحمد لله",
+    "الله أكبر",
+    "لا إله إلا الله",
+  ];
 }
