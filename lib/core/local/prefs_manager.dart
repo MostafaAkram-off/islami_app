@@ -23,6 +23,19 @@ class PrefsManager {
     );
   }
 
+  static void saveSebha(int counter, int azkarIndex) {
+    preferences.setInt("sebha_counter", counter);
+    preferences.setInt("sebha_azkar_index", azkarIndex);
+  }
+
+  static int getSebhaCounter() {
+    return preferences.getInt("sebha_counter") ?? 0;
+  }
+
+  static int getSebhaAzkarIndex() {
+    return preferences.getInt("sebha_azkar_index") ?? 0;
+  }
+
   static List<SuraModel> getMostRecent() {
     List<String> mostRecentString =
         preferences.getStringList("most_recent") ?? [];
