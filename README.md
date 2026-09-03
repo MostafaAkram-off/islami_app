@@ -7,6 +7,7 @@
 [![Flutter](https://img.shields.io/badge/Flutter-3.41-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.11-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-lightgrey)](#)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 <img src="screenshots/quran.png" width="200" alt="Quran tab" />
 <img src="screenshots/time.png" width="200" alt="Prayer times tab" />
@@ -129,3 +130,9 @@ develop ──●──●──●──●────────────
 Design by **John Safwat** · Supervised by **Mohamed Nabil** · Built at **Route Academy**
 
 Quran radio and reciters by [mp3quran.net](https://mp3quran.net) · Prayer times by [Aladhan](https://aladhan.com)
+
+## License
+
+The source code is released under the [MIT License](LICENSE).
+
+The bundled assets are not: the design and artwork belong to **John Safwat**, the Janna typeface to its foundry, and the radio and prayer-time data to [mp3quran.net](https://mp3quran.net) and [Aladhan](https://aladhan.com). See the LICENSE file for the details.
