@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/api/api_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
@@ -64,6 +65,17 @@ class _RadioTabState extends State<RadioTab> {
   void toggleMute() {
     setState(() => isMuted = !isMuted);
     player.setVolume(isMuted ? 0 : 1);
+  }
+
+  /// بتفرّق بين إن مفيش نت وبين أي مشكلة تانية
+  static String errorMessage(Object? error) {
+    if (error is DioException &&
+        (error.type == DioExceptionType.connectionError ||
+            error.type == DioExceptionType.connectionTimeout ||
+            error.type == DioExceptionType.receiveTimeout)) {
+      return StringsManger.noInternet;
+    }
+    return StringsManger.somethingWentWrong;
   }
 
   @override
@@ -141,7 +153,7 @@ class _RadioTabState extends State<RadioTab> {
     return FutureBuilder<List<T>>(
       future: future,
       builder: (context, snapshot) {
-        if (snapshot.hasError) return buildError(onRetry);
+        if (snapshot.hasError) return buildError(onRetry, snapshot.error);
         if (!snapshot.hasData) return buildLoadingSkeleton();
         return ListView.separated(
           padding: const EdgeInsets.only(bottom: 16),
@@ -168,13 +180,14 @@ class _RadioTabState extends State<RadioTab> {
     );
   }
 
-  Widget buildError(VoidCallback onRetry) {
+  Widget buildError(VoidCallback onRetry, Object? error) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 8,
       children: [
         Text(
-          StringsManger.somethingWentWrong,
+          errorMessage(error),
+          textAlign: TextAlign.center,
           style: TextStyles.largeBodyTextStyle(),
         ),
         ElevatedButton(

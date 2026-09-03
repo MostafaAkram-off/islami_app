@@ -44,6 +44,7 @@ abstract class StringsManger {
   static const String eveningAzkar = "Evening Azkar";
   static const String morningAzkar = "Morning Azkar";
   static const String somethingWentWrong = "Something went wrong";
+  static const String noInternet = "No internet connection";
   static const String tryAgain = "Try Again";
 
   static const String reciters = "Reciters";
