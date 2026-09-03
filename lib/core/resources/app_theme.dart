@@ -23,6 +23,13 @@ abstract class AppTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: ColorsManger.goldColor,
     ),
+    // انتقال الشاشات بتاع Material 3 بدل الـ slide الافتراضي
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: ColorsManger.goldColor,
