@@ -57,6 +57,14 @@ abstract class StringsManger {
   static const String countTasbeeh = "Count a tasbeeh";
   static const String outOf = "of";
 
+  static const String prayerReminderTitle = "Islami";
+  static const String prayerReminderBody = "It is time for";
+  static const String prayerReminderChannel = "Prayer times";
+  static const String remindersOn = "Turn off prayer reminders";
+  static const String remindersOff = "Turn on prayer reminders";
+  static const String remindersBlocked =
+      "Enable notifications for Islami to get prayer reminders";
+
   static const String reset = "Reset";
   static const String completed = "Completed";
 }

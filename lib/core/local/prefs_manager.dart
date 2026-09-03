@@ -35,6 +35,14 @@ class PrefsManager {
     return preferences.getInt("sebha_counter") ?? 0;
   }
 
+  static void savePrayerReminders(bool enabled) {
+    preferences.setBool("prayer_reminders", enabled);
+  }
+
+  static bool getPrayerReminders() {
+    return preferences.getBool("prayer_reminders") ?? false;
+  }
+
   static int getSebhaAzkarIndex() {
     return preferences.getInt("sebha_azkar_index") ?? 0;
   }
