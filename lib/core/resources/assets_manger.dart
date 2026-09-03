@@ -25,4 +25,7 @@ abstract class AssetsManger {
   static const String sebhaBack = "assets/images/sebha_back.png";
   static const String sebhaBody = "assets/images/sebha_body.png";
   static const String sebhaHead = "assets/images/sebha_head.png";
+  static const String timeBack = "assets/images/time_back.png";
+  static const String eveningAzkar = "assets/images/evening_azkar.png";
+  static const String morningAzkar = "assets/images/morning_azkar.png";
 }
