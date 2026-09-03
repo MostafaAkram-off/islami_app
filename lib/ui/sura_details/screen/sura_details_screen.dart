@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:islami_app/core/local/text_assets.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
+import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
+import 'package:islami_app/core/utils/arabic_numbers.dart';
 import 'package:islami_app/model/sura_model.dart';
 
 class SuraDetailsScreen extends StatefulWidget {
@@ -13,24 +15,42 @@ class SuraDetailsScreen extends StatefulWidget {
 }
 
 class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
+  String suraVerses = "";
+  bool hasError = false;
+
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (suraVerses.isEmpty && !hasError) {
       SuraModel sura = ModalRoute.of(context)!.settings.arguments as SuraModel;
       readSuraFile(sura.suraNumber);
-    });
+    }
+  }
+
+  Future<void> readSuraFile(int suraNumber) async {
+    try {
+      List<String> verses = await TextAssets.readLines(
+        "assets/suras/$suraNumber.txt",
+      );
+      String text = "";
+      for (int i = 0; i < verses.length; i++) {
+        text += "${verses[i]} (${ArabicNumbers.format(i + 1)}) ";
+      }
+      if (mounted) setState(() => suraVerses = text.trim());
+    } catch (_) {
+      if (mounted) setState(() => hasError = true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    SuraModel sura = ModalRoute.of(context)?.settings.arguments as SuraModel;
+    SuraModel sura = ModalRoute.of(context)!.settings.arguments as SuraModel;
     return Scaffold(
       backgroundColor: ColorsManger.blackColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: ColorsManger.goldColor),
+        iconTheme: const IconThemeData(color: ColorsManger.goldColor),
         centerTitle: true,
         title: Text(sura.suraNameEn, style: TextStyles.smallTitleTextStyle()),
       ),
@@ -46,28 +66,7 @@ class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
                 Image.asset(AssetsManger.rightCorner),
               ],
             ),
-            Expanded(
-              child: suraVerses.isNotEmpty
-                  ? SingleChildScrollView(
-                      child: Text(
-                        textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.center,
-                        suraVerses,
-                        style: TextStyle(
-                          height: 2.5,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          color: ColorsManger.goldColor,
-                          fontFamily: "Janna",
-                        ),
-                      ),
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(
-                        color: ColorsManger.goldColor,
-                      ),
-                    ),
-            ),
+            Expanded(child: buildBody()),
             Image.asset(AssetsManger.suraMosque),
           ],
         ),
@@ -75,17 +74,27 @@ class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
     );
   }
 
-  String suraVerses = "";
-
-  Future<void> readSuraFile(int suraNumber) async {
-    String suraText = await rootBundle.loadString(
-      "assets/suras/$suraNumber.txt",
-    );
-    List<String> suraLines = suraText.split("\n");
-    for (int i = 0; i < suraLines.length; i++) {
-      suraVerses = suraVerses + suraLines[i].trim();
-      suraVerses = suraVerses + "(${i + 1})";
+  Widget buildBody() {
+    if (hasError) {
+      return Center(
+        child: Text(
+          StringsManger.somethingWentWrong,
+          style: TextStyles.largeBodyTextStyle(),
+        ),
+      );
     }
-    setState(() {});
+    if (suraVerses.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(color: ColorsManger.goldColor),
+      );
+    }
+    return SingleChildScrollView(
+      child: Text(
+        suraVerses,
+        textDirection: TextDirection.rtl,
+        textAlign: TextAlign.center,
+        style: TextStyles.suraVerseTextStyle(),
+      ),
+    );
   }
 }

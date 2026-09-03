@@ -100,4 +100,17 @@ class TextStyles {
       fontFamily: "Janna",
     );
   }
+
+  /// ستايل نص السور والأحاديث في شاشات التفاصيل
+  static TextStyle suraVerseTextStyle({
+    Color textColor = ColorsManger.goldColor,
+  }) {
+    return TextStyle(
+      color: textColor,
+      fontWeight: FontWeight.w700,
+      fontSize: 20,
+      height: 2.5,
+      fontFamily: "Janna",
+    );
+  }
 }

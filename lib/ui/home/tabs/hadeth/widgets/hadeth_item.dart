@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:islami_app/core/local/text_assets.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/routes_manger.dart';
@@ -7,23 +7,47 @@ import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/hadeth_model.dart';
 
 class HadethItem extends StatefulWidget {
-  bool isSelected;
-  int hadethNumber;
+  final bool isSelected;
+  final int hadethNumber;
 
-  HadethItem({super.key, required this.isSelected, required this.hadethNumber});
+  const HadethItem({
+    super.key,
+    required this.isSelected,
+    required this.hadethNumber,
+  });
 
   @override
   State<HadethItem> createState() => _HadethItemState();
 }
 
 class _HadethItemState extends State<HadethItem> {
+  HadethModel? myHadeth;
+
+  @override
+  void initState() {
+    super.initState();
+    readFile();
+  }
+
+  Future<void> readFile() async {
+    List<String> lines = await TextAssets.readLines(
+      "assets/Hadeeth/h${widget.hadethNumber}.txt",
+    );
+    if (lines.isEmpty || !mounted) return;
+    setState(() {
+      myHadeth = HadethModel(
+        title: lines.first,
+        content: lines.skip(1).join(" "),
+        number: widget.hadethNumber,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (myHadeth == null) {
-      readFile();
-    }
     return InkWell(
       onTap: () {
+        if (myHadeth == null) return;
         Navigator.of(
           context,
         ).pushNamed(RoutesManger.hadethDetailsRouteName, arguments: myHadeth);
@@ -84,7 +108,7 @@ class _HadethItemState extends State<HadethItem> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 22),
+                    padding: const EdgeInsets.symmetric(horizontal: 22),
                     child: Text(
                       myHadeth?.content ?? "",
                       textDirection: TextDirection.rtl,
@@ -103,24 +127,5 @@ class _HadethItemState extends State<HadethItem> {
         ),
       ),
     );
-  }
-
-  HadethModel? myHadeth;
-
-  Future<void> readFile() async {
-    String allHadeth = await rootBundle.loadString(
-      "assets/Hadeeth/h${widget.hadethNumber}.txt",
-    );
-    List<String> hadethLines = allHadeth.split('\n');
-    String title = hadethLines[0];
-    hadethLines.removeAt(0);
-    String content = hadethLines.join(" ");
-    setState(() {
-      myHadeth = HadethModel(
-        title: title,
-        content: content,
-        number: widget.hadethNumber,
-      );
-    });
   }
 }
