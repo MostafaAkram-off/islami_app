@@ -45,4 +45,6 @@ abstract class StringsManger {
   static const String morningAzkar = "Morning Azkar";
   static const String somethingWentWrong = "Something went wrong";
   static const String tryAgain = "Try Again";
+
+  static const String reciters = "Reciters";
 }
