@@ -78,7 +78,7 @@ class _HadethItemState extends State<HadethItem> {
                   ),
                   Text(
                     myHadeth?.title ?? "",
-                    style: TextStyles.largeTitleTextStyle(
+                    style: TextStyles.smallTitleTextStyle(
                       textColor: ColorsManger.blackColor,
                     ),
                   ),
@@ -107,16 +107,17 @@ class _HadethItemState extends State<HadethItem> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 22),
-                    child: Text(
-                      myHadeth?.content ?? "",
-                      textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.center,
-                      maxLines: 12,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyles.mediumLabelTextStyle(
-                        textColor: ColorsManger.blackColor,
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                      child: Text(
+                        myHadeth?.content ?? "",
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                        maxLines: 22,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyles.hadethCardTextStyle(),
                       ),
                     ),
                   ),
