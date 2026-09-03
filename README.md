@@ -79,6 +79,14 @@ The Quran text, the hadith and the azkar ship with the app as assets, so everyth
 
 The `www.` on the mp3quran host is required — without it the server answers `301` and Dio does not follow the redirect by default.
 
+## Tests
+
+Unit tests cover the parsing and formatting logic that has no UI: the prayer-times response, the twelve-hour clock, the next-prayer rollover, the reciter track URLs, the Arabic-Indic numerals and the azkar lists.
+
+```bash
+flutter test
+```
+
 ## Project structure
 
 ```
