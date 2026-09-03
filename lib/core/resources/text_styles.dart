@@ -101,15 +101,29 @@ class TextStyles {
     );
   }
 
-  /// ستايل نص السور والأحاديث في شاشات التفاصيل
+  /// ستايل نص السور والأحاديث في شاشات التفاصيل.
+  /// الوزن w700 بيوصل لخط Janna Regular، وw900 هو اللي بيوصل للـ Bold
   static TextStyle suraVerseTextStyle({
     Color textColor = ColorsManger.goldColor,
   }) {
     return TextStyle(
       color: textColor,
       fontWeight: FontWeight.w700,
-      fontSize: 20,
-      height: 2.5,
+      fontSize: 16,
+      height: 2.1,
+      fontFamily: "Janna",
+    );
+  }
+
+  /// نص الحديث جوه الكارت في التاب — Regular وصغير زي الديزاين
+  static TextStyle hadethCardTextStyle({
+    Color textColor = ColorsManger.blackColor,
+  }) {
+    return TextStyle(
+      color: textColor,
+      fontWeight: FontWeight.w700,
+      fontSize: 14,
+      height: 1.75,
       fontFamily: "Janna",
     );
   }
