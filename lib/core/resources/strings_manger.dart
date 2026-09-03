@@ -47,4 +47,7 @@ abstract class StringsManger {
   static const String tryAgain = "Try Again";
 
   static const String reciters = "Reciters";
+
+  static const String reset = "Reset";
+  static const String completed = "Completed";
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/local/prefs_manager.dart';
 import 'package:islami_app/core/resources/app_theme.dart';
+import 'package:islami_app/ui/azkar/screen/azkar_screen.dart';
 import 'package:islami_app/ui/hadeth_details/screen/hadeth_details_screen.dart';
 import 'package:islami_app/ui/home/screen/home_screen.dart';
 import 'package:islami_app/ui/onboarding/screen/onboarding_screen.dart';
@@ -29,6 +30,7 @@ class Islami extends StatelessWidget {
             const SuraDetailsScreen(),
         RoutesManger.hadethDetailsRouteName: (context) =>
             const HadethDetailsScreen(),
+        RoutesManger.azkarRouteName: (context) => const AzkarScreen(),
       },
       initialRoute: PrefsManager.getOnboardingViewed()
           ? RoutesManger.homeRouteName

@@ -4,4 +4,5 @@ abstract class RoutesManger {
 
   static const String hadethDetailsRouteName = "hadeth_details";
   static const String onBoardingRouteName = "on_boarding";
+  static const String azkarRouteName = "azkar";
 }

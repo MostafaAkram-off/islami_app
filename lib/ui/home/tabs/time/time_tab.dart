@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/api/api_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
+import 'package:islami_app/core/resources/routes_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
+import 'package:islami_app/model/azkar_model.dart';
+import 'package:islami_app/model/zekr_model.dart';
 import 'package:islami_app/model/pray_time_model.dart';
+import 'package:islami_app/ui/azkar/screen/azkar_screen.dart';
 import 'package:islami_app/ui/home/tabs/time/widgets/azkar_item.dart';
 import 'package:islami_app/ui/home/tabs/time/widgets/pray_time_card.dart';
 
@@ -25,6 +29,14 @@ class _TimeTabState extends State<TimeTab> {
 
   void loadPrayTimes() {
     prayTimesFuture = ApiManager.getPrayTimes();
+  }
+
+  void openAzkar(String title, List<ZekrModel> azkar) {
+    Navigator.pushNamed(
+      context,
+      RoutesManger.azkarRouteName,
+      arguments: AzkarArguments(title: title, azkar: azkar),
+    );
   }
 
   @override
@@ -74,17 +86,25 @@ class _TimeTabState extends State<TimeTab> {
                     height: screenHeight * 0.28,
                     child: Row(
                       spacing: 16,
-                      children: const [
+                      children: [
                         Expanded(
                           child: AzkarItem(
                             title: StringsManger.eveningAzkar,
                             image: AssetsManger.eveningAzkar,
+                            onTap: () => openAzkar(
+                              StringsManger.eveningAzkar,
+                              AzkarModel.evening,
+                            ),
                           ),
                         ),
                         Expanded(
                           child: AzkarItem(
                             title: StringsManger.morningAzkar,
                             image: AssetsManger.morningAzkar,
+                            onTap: () => openAzkar(
+                              StringsManger.morningAzkar,
+                              AzkarModel.morning,
+                            ),
                           ),
                         ),
                       ],
