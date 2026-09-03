@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
@@ -42,10 +43,12 @@ class _AzkarScreenState extends State<AzkarScreen> {
   }
 
   void countZekr(int index) {
+    HapticFeedback.lightImpact();
     setState(() => counters[index]++);
   }
 
   void resetAll() {
+    HapticFeedback.mediumImpact();
     setState(() => counters = List.filled(arguments.azkar.length, 0));
   }
 
@@ -105,10 +108,18 @@ class _AzkarScreenState extends State<AzkarScreen> {
           ),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(
-              value: total == 0 ? 0 : doneCount / total,
-              minHeight: 8,
-              backgroundColor: ColorsManger.blackColor.withValues(alpha: 0.7),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(
+                begin: 0,
+                end: total == 0 ? 0 : doneCount / total,
+              ),
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeOut,
+              builder: (context, value, child) => LinearProgressIndicator(
+                value: value,
+                minHeight: 8,
+                backgroundColor: ColorsManger.blackColor.withValues(alpha: 0.7),
+              ),
             ),
           ),
         ],

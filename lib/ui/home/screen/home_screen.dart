@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
@@ -36,36 +37,76 @@ class _HomeScreenState extends State<HomeScreen> {
     (icon: AssetsManger.timeTab, label: StringsManger.time),
   ];
 
+  void onDestinationSelected(int index) {
+    if (index == selectedIndex) return;
+    HapticFeedback.selectionClick();
+    setState(() => selectedIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ColorsManger.blackColor,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        onDestinationSelected: (value) => setState(() => selectedIndex = value),
-        backgroundColor: ColorsManger.goldColor,
-        labelTextStyle: WidgetStateTextStyle.resolveWith(
-          (states) => TextStyles.mediumBodyTextStyle(),
+      bottomNavigationBar: buildNavigationBar(),
+      // IndexedStack بيحافظ على حالة كل تاب (الراديو يفضل شغال والمواقيت
+      // متتجابش تاني)، والـ TweenAnimationBuilder بيدخّل التاب الجديد بـ fade
+      // من غير ما يعيد بناء الـ stack نفسه فالحالة بتفضل موجودة
+      body: TweenAnimationBuilder<double>(
+        key: ValueKey<int>(selectedIndex),
+        tween: Tween<double>(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOut,
+        builder: (context, value, child) => Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, (1 - value) * 10),
+            child: child,
+          ),
         ),
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        indicatorColor: ColorsManger.blackColor.withValues(alpha: 0.6),
-        destinations: destinations
-            .map(
-              (destination) => NavigationDestination(
-                icon: buildTabIcon(destination.icon, ColorsManger.blackColor),
-                selectedIcon: buildTabIcon(
-                  destination.icon,
-                  ColorsManger.whiteColor,
-                ),
-                label: destination.label,
-              ),
-            )
-            .toList(),
+        child: IndexedStack(index: selectedIndex, children: tabs),
       ),
-      // IndexedStack بدل ما نبني التاب من أول وجديد كل مرة، عشان الراديو
-      // يفضل شغال لما تخرج من التاب والمواقيت متتجابش من الـ API كل مرة
-      body: IndexedStack(index: selectedIndex, children: tabs),
+    );
+  }
+
+  Widget buildNavigationBar() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.45),
+            blurRadius: 24,
+            offset: const Offset(0, -6),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        child: NavigationBar(
+          selectedIndex: selectedIndex,
+          onDestinationSelected: onDestinationSelected,
+          backgroundColor: ColorsManger.goldColor,
+          animationDuration: const Duration(milliseconds: 450),
+          labelTextStyle: WidgetStateTextStyle.resolveWith(
+            (states) => TextStyles.mediumBodyTextStyle(),
+          ),
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          indicatorColor: ColorsManger.blackColor.withValues(alpha: 0.6),
+          destinations: destinations
+              .map(
+                (destination) => NavigationDestination(
+                  icon: buildTabIcon(destination.icon, ColorsManger.blackColor),
+                  selectedIcon: buildTabIcon(
+                    destination.icon,
+                    ColorsManger.whiteColor,
+                  ),
+                  label: destination.label,
+                ),
+              )
+              .toList(),
+        ),
+      ),
     );
   }
 

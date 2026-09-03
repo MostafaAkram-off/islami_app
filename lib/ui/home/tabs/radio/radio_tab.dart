@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/api/api_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
+import 'package:islami_app/core/reuseable_components/fade_slide_in.dart';
+import 'package:islami_app/core/reuseable_components/shimmer_box.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/radio_model.dart';
@@ -140,16 +142,29 @@ class _RadioTabState extends State<RadioTab> {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.hasError) return buildError(onRetry);
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        if (!snapshot.hasData) return buildLoadingSkeleton();
         return ListView.separated(
           padding: const EdgeInsets.only(bottom: 16),
           itemCount: snapshot.data!.length,
           separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) => itemBuilder(snapshot.data![index]),
+          itemBuilder: (context, index) => FadeSlideIn(
+            index: index,
+            child: itemBuilder(snapshot.data![index]),
+          ),
         );
       },
+    );
+  }
+
+  /// كروت رمادية بتلمع بنفس مقاس كارت الإذاعة بدل الـ spinner
+  Widget buildLoadingSkeleton() {
+    return ListView.separated(
+      padding: const EdgeInsets.only(bottom: 16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 4,
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      itemBuilder: (context, index) =>
+          const ShimmerBox(height: 133, radius: 20),
     );
   }
 
