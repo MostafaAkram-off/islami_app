@@ -28,4 +28,7 @@ abstract class AssetsManger {
   static const String timeBack = "assets/images/time_back.png";
   static const String eveningAzkar = "assets/images/evening_azkar.png";
   static const String morningAzkar = "assets/images/morning_azkar.png";
+  static const String radioBack = "assets/images/radio_back.png";
+  static const String radioCardMosque = "assets/images/radio_card_mosque.png";
+  static const String soundWave = "assets/images/sound_wave.png";
 }
