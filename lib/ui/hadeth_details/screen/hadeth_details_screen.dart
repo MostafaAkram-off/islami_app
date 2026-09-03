@@ -19,7 +19,10 @@ class HadethDetailsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         iconTheme: IconThemeData(color: ColorsManger.goldColor),
         centerTitle: true,
-        title: Text("Hadith ${hadeth.number}", style: TextStyles.smallTitleTextStyle()),
+        title: Text(
+          "Hadith ${hadeth.number}",
+          style: TextStyles.smallTitleTextStyle(),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -41,19 +44,13 @@ class HadethDetailsScreen extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                      child: Text(
-                        textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.center,
-                        hadeth.content,
-                        style: TextStyle(
-                          height: 2.5,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          color: ColorsManger.goldColor,
-                          fontFamily: "Janna",
-                        ),
-                      ),
-                    )
+                child: Text(
+                  hadeth.content,
+                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.center,
+                  style: TextStyles.suraVerseTextStyle(),
+                ),
+              ),
             ),
             Image.asset(AssetsManger.suraMosque),
           ],
