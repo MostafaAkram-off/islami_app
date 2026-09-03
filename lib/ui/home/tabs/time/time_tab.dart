@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/api/api_manager.dart';
+import 'package:islami_app/core/reuseable_components/shimmer_box.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/routes_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
@@ -70,7 +71,7 @@ class _TimeTabState extends State<TimeTab> {
                 builder: (context, snapshot) {
                   if (snapshot.hasError) return buildError();
                   if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const ShimmerBox(height: 270, radius: 24);
                   }
                   return PrayTimeCard(prayTime: snapshot.data!);
                 },

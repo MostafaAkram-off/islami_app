@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:islami_app/core/local/prefs_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
@@ -26,6 +27,7 @@ class _SebhaTabState extends State<SebhaTab> {
   late double turns = counter / beadsCount;
 
   void onSebhaTap() {
+    HapticFeedback.lightImpact();
     setState(() {
       turns += 1 / beadsCount;
       if (counter == tasbeehTarget) {

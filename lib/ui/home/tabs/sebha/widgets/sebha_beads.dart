@@ -49,10 +49,24 @@ class SebhaBeads extends StatelessWidget {
                 spacing: 8,
                 children: [
                   Text(zekr, style: TextStyles.largeTitleTextStyle()),
-                  Text(
-                    "$counter",
-                    style: TextStyles.largeTitleTextStyle(
-                      textColor: ColorsManger.whiteColor,
+                  // الرقم بيدخل بـ scale صغير مع كل ضغطة
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 220),
+                    transitionBuilder: (child, animation) => ScaleTransition(
+                      scale: Tween<double>(begin: 0.7, end: 1).animate(
+                        CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOutBack,
+                        ),
+                      ),
+                      child: FadeTransition(opacity: animation, child: child),
+                    ),
+                    child: Text(
+                      "$counter",
+                      key: ValueKey<int>(counter),
+                      style: TextStyles.largeTitleTextStyle(
+                        textColor: ColorsManger.whiteColor,
+                      ),
                     ),
                   ),
                 ],
