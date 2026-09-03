@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:islami_app/core/api/api_manager.dart';
+import 'package:islami_app/core/local/location_service.dart';
 import 'package:islami_app/core/reuseable_components/shimmer_box.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/routes_manger.dart';
@@ -29,7 +32,17 @@ class _TimeTabState extends State<TimeTab> {
   }
 
   void loadPrayTimes() {
-    prayTimesFuture = ApiManager.getPrayTimes();
+    prayTimesFuture = fetchPrayTimes();
+  }
+
+  /// بيحاول يجيب الموقع الأول؛ لو مش متاح الـ ApiManager بيرجع
+  /// لمواقيت المدينة الافتراضية من غير ما يوقع الشاشة
+  Future<PrayTimeModel> fetchPrayTimes() async {
+    Position? position = await LocationService.getPosition();
+    return ApiManager.getPrayTimes(
+      latitude: position?.latitude,
+      longitude: position?.longitude,
+    );
   }
 
   void openAzkar(String title, List<ZekrModel> azkar) {
@@ -38,6 +51,17 @@ class _TimeTabState extends State<TimeTab> {
       RoutesManger.azkarRouteName,
       arguments: AzkarArguments(title: title, azkar: azkar),
     );
+  }
+
+  /// بتفرّق بين إن مفيش نت وبين أي مشكلة تانية
+  static String errorMessage(Object? error) {
+    if (error is DioException &&
+        (error.type == DioExceptionType.connectionError ||
+            error.type == DioExceptionType.connectionTimeout ||
+            error.type == DioExceptionType.receiveTimeout)) {
+      return StringsManger.noInternet;
+    }
+    return StringsManger.somethingWentWrong;
   }
 
   @override
@@ -69,7 +93,7 @@ class _TimeTabState extends State<TimeTab> {
               FutureBuilder<PrayTimeModel>(
                 future: prayTimesFuture,
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) return buildError();
+                  if (snapshot.hasError) return buildError(snapshot.error);
                   if (!snapshot.hasData) {
                     return const ShimmerBox(height: 270, radius: 24);
                   }
@@ -120,12 +144,13 @@ class _TimeTabState extends State<TimeTab> {
     );
   }
 
-  Widget buildError() {
+  Widget buildError(Object? error) {
     return Column(
       spacing: 8,
       children: [
         Text(
-          StringsManger.somethingWentWrong,
+          errorMessage(error),
+          textAlign: TextAlign.center,
           style: TextStyles.largeBodyTextStyle(),
         ),
         ElevatedButton(
