@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:islami_app/core/local/notification_service.dart';
+import 'package:islami_app/core/local/prefs_manager.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
@@ -20,12 +22,39 @@ class _PrayTimeCardState extends State<PrayTimeCard> {
   static const double itemsGap = 8;
 
   final ScrollController scrollController = ScrollController();
-  bool isMuted = false;
+
+  /// التذكير مقفول افتراضياً؛ المستخدم هو اللي بيفتحه من الزرار
+  bool remindersOn = PrefsManager.getPrayerReminders();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => scrollToNextPrayer());
+    // المواقيت اتحدثت، فلو التذكير مفتوح لازم يتجدول من جديد
+    if (remindersOn) NotificationService.schedulePrayers(widget.prayTime);
+  }
+
+  Future<void> toggleReminders() async {
+    if (remindersOn) {
+      await NotificationService.cancelAll();
+      PrefsManager.savePrayerReminders(false);
+      if (mounted) setState(() => remindersOn = false);
+      return;
+    }
+
+    bool granted = await NotificationService.requestPermission();
+    if (!granted) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(StringsManger.remindersBlocked)),
+        );
+      }
+      return;
+    }
+
+    await NotificationService.schedulePrayers(widget.prayTime);
+    PrefsManager.savePrayerReminders(true);
+    if (mounted) setState(() => remindersOn = true);
   }
 
   @override
@@ -160,10 +189,12 @@ class _PrayTimeCardState extends State<PrayTimeCard> {
             ),
           ),
           IconButton(
-            tooltip: isMuted ? StringsManger.unmute : StringsManger.mute,
-            onPressed: () => setState(() => isMuted = !isMuted),
+            tooltip: remindersOn
+                ? StringsManger.remindersOn
+                : StringsManger.remindersOff,
+            onPressed: toggleReminders,
             icon: Icon(
-              isMuted ? Icons.volume_off : Icons.volume_up,
+              remindersOn ? Icons.volume_up : Icons.volume_off,
               color: ColorsManger.blackColor,
               size: 28,
             ),
