@@ -21,6 +21,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
 
+  /// التابات اللي المستخدم فتحها فعلاً. الـ IndexedStack بيبني كل عياله
+  /// مرة واحدة، وده كان معناه إن التطبيق أول ما يفتح يضرب ٣ ريكوستات
+  /// ويطلب إذن الموقع وانت لسه على تاب القرآن
+  final Set<int> visitedTabs = {0};
+
   static const List<Widget> tabs = [
     QuranTab(),
     HadethTab(),
@@ -40,7 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void onDestinationSelected(int index) {
     if (index == selectedIndex) return;
     HapticFeedback.selectionClick();
-    setState(() => selectedIndex = index);
+    setState(() {
+      selectedIndex = index;
+      visitedTabs.add(index);
+    });
   }
 
   @override
@@ -64,7 +72,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: child,
           ),
         ),
-        child: IndexedStack(index: selectedIndex, children: tabs),
+        child: IndexedStack(
+          index: selectedIndex,
+          children: List.generate(
+            tabs.length,
+            // التاب بيتبنى أول ما تفتحه، وبعدها بيفضل عايش عشان حالته تتحفظ
+            (index) => visitedTabs.contains(index)
+                ? tabs[index]
+                : const SizedBox.shrink(),
+          ),
+        ),
       ),
     );
   }
