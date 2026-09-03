@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/api/api_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
-import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/pray_time_model.dart';
@@ -20,22 +17,10 @@ class TimeTab extends StatefulWidget {
 class _TimeTabState extends State<TimeTab> {
   late Future<PrayTimeModel> prayTimesFuture;
 
-  /// بيعمل rebuild كل ثانية عشان العداد بتاع الصلاة الجاية ينزل
-  Timer? countdownTimer;
-
   @override
   void initState() {
     super.initState();
     loadPrayTimes();
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    countdownTimer?.cancel();
-    super.dispose();
   }
 
   void loadPrayTimes() {
@@ -73,11 +58,7 @@ class _TimeTabState extends State<TimeTab> {
                 builder: (context, snapshot) {
                   if (snapshot.hasError) return buildError();
                   if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: ColorsManger.goldColor,
-                      ),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   }
                   return PrayTimeCard(prayTime: snapshot.data!);
                 },
@@ -128,10 +109,6 @@ class _TimeTabState extends State<TimeTab> {
         ),
         ElevatedButton(
           onPressed: () => setState(loadPrayTimes),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: ColorsManger.goldColor,
-            foregroundColor: ColorsManger.blackColor,
-          ),
           child: const Text(StringsManger.tryAgain),
         ),
       ],

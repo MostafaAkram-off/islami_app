@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/api/api_manager.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
-import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/radio_model.dart';
@@ -142,9 +141,7 @@ class _RadioTabState extends State<RadioTab> {
       builder: (context, snapshot) {
         if (snapshot.hasError) return buildError(onRetry);
         if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(color: ColorsManger.goldColor),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
         return ListView.separated(
           padding: const EdgeInsets.only(bottom: 16),
@@ -167,10 +164,6 @@ class _RadioTabState extends State<RadioTab> {
         ),
         ElevatedButton(
           onPressed: () => setState(onRetry),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: ColorsManger.goldColor,
-            foregroundColor: ColorsManger.blackColor,
-          ),
           child: const Text(StringsManger.tryAgain),
         ),
       ],

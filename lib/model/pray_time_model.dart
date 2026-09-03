@@ -91,6 +91,15 @@ class PrayerModel {
 
   PrayerModel({required this.name, required this.time});
 
+  // nextPrayer بترجع كائن جديد لما اليوم يخلص وترجع فجر بكرة، فالمقارنة
+  // لازم تبقى بالقيمة مش بالمرجع وإلا كل تيك هيبان كأنه صلاة اتغيرت
+  @override
+  bool operator ==(Object other) =>
+      other is PrayerModel && other.name == name && other.time == time;
+
+  @override
+  int get hashCode => Object.hash(name, time);
+
   /// الوقت بصيغة 12 ساعة زي "04:38"
   String get formattedTime {
     int hour = time.hour % 12;

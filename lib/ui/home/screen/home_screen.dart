@@ -19,120 +19,60 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
-  List<Widget> tabs = [
+
+  static const List<Widget> tabs = [
     QuranTab(),
     HadethTab(),
     SebhaTab(),
     RadioTab(),
     TimeTab(),
   ];
+
+  static const List<({String icon, String label})> destinations = [
+    (icon: AssetsManger.quranTab, label: StringsManger.quran),
+    (icon: AssetsManger.hadethTab, label: StringsManger.hadith),
+    (icon: AssetsManger.sebhaTab, label: StringsManger.sebha),
+    (icon: AssetsManger.radioTab, label: StringsManger.radio),
+    (icon: AssetsManger.timeTab, label: StringsManger.time),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: ColorsManger.blackColor,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex  ,
-        onDestinationSelected: (value) {
-          setState(() {
-            selectedIndex = value;
-          });
-        },
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (value) => setState(() => selectedIndex = value),
         backgroundColor: ColorsManger.goldColor,
-        labelTextStyle: WidgetStateTextStyle.resolveWith((states) {
-          return TextStyles.mediumBodyTextStyle();
-        }),
+        labelTextStyle: WidgetStateTextStyle.resolveWith(
+          (states) => TextStyles.mediumBodyTextStyle(),
+        ),
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         indicatorColor: ColorsManger.blackColor.withValues(alpha: 0.6),
-        destinations: [
-          NavigationDestination(
-            icon: SvgPicture.asset(
-              AssetsManger.quranTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.blackColor,
-                BlendMode.srcIn,
+        destinations: destinations
+            .map(
+              (destination) => NavigationDestination(
+                icon: buildTabIcon(destination.icon, ColorsManger.blackColor),
+                selectedIcon: buildTabIcon(
+                  destination.icon,
+                  ColorsManger.whiteColor,
+                ),
+                label: destination.label,
               ),
-            ),
-            selectedIcon: SvgPicture.asset(
-              AssetsManger.quranTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.whiteColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: StringsManger.quran,
-          ),
-          NavigationDestination(
-            icon: SvgPicture.asset(
-              AssetsManger.hadethTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.blackColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            selectedIcon: SvgPicture.asset(
-              AssetsManger.hadethTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.whiteColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: StringsManger.hadith,
-          ),
-          NavigationDestination(
-            icon: SvgPicture.asset(
-              AssetsManger.sebhaTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.blackColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            selectedIcon: SvgPicture.asset(
-              AssetsManger.sebhaTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.whiteColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: StringsManger.sebha,
-          ),
-          NavigationDestination(
-            icon: SvgPicture.asset(
-              AssetsManger.radioTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.blackColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            selectedIcon: SvgPicture.asset(
-              AssetsManger.radioTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.whiteColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: StringsManger.radio,
-          ),
-          NavigationDestination(
-            icon: SvgPicture.asset(
-              AssetsManger.timeTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.blackColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            selectedIcon: SvgPicture.asset(
-              AssetsManger.timeTab,
-              colorFilter: ColorFilter.mode(
-                ColorsManger.whiteColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            label: StringsManger.time,
-          ),
-        ],
+            )
+            .toList(),
       ),
-      body: tabs[selectedIndex],
+      // IndexedStack بدل ما نبني التاب من أول وجديد كل مرة، عشان الراديو
+      // يفضل شغال لما تخرج من التاب والمواقيت متتجابش من الـ API كل مرة
+      body: IndexedStack(index: selectedIndex, children: tabs),
+    );
+  }
+
+  Widget buildTabIcon(String asset, Color color) {
+    return SvgPicture.asset(
+      asset,
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
     );
   }
 }

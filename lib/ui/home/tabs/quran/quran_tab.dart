@@ -95,7 +95,8 @@ class _QuranTabState extends State<QuranTab> {
               SizedBox(height: 10),
               Expanded(
                 child: ListView.separated(
-                  itemBuilder: (context, index) => MostRecentItem(mostRecent[index]),
+                  itemBuilder: (context, index) =>
+                      MostRecentItem(mostRecent[index]),
                   separatorBuilder: (context, index) => SizedBox(width: 10),
                   itemCount: mostRecent.length,
                   scrollDirection: Axis.horizontal,
@@ -116,6 +117,12 @@ class _QuranTabState extends State<QuranTab> {
                       setState(() {
                         mostRecent.remove(filteredSuras[index]);
                         mostRecent.insert(0, filteredSuras[index]);
+                        if (mostRecent.length > PrefsManager.mostRecentLimit) {
+                          mostRecent.removeRange(
+                            PrefsManager.mostRecentLimit,
+                            mostRecent.length,
+                          );
+                        }
                         PrefsManager.saveMostRecent(mostRecent);
                       });
                     }),

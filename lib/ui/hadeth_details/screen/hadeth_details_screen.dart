@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
-import 'package:islami_app/core/resources/colors_manger.dart';
+import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/hadeth_model.dart';
-
-import '../../../core/resources/text_styles.dart';
 
 class HadethDetailsScreen extends StatelessWidget {
   const HadethDetailsScreen({super.key});
@@ -13,17 +11,7 @@ class HadethDetailsScreen extends StatelessWidget {
     HadethModel hadeth =
         ModalRoute.of(context)?.settings.arguments as HadethModel;
     return Scaffold(
-      backgroundColor: ColorsManger.blackColor,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: ColorsManger.goldColor),
-        centerTitle: true,
-        title: Text(
-          "Hadith ${hadeth.number}",
-          style: TextStyles.smallTitleTextStyle(),
-        ),
-      ),
+      appBar: AppBar(title: Text("Hadith ${hadeth.number}")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
         child: Column(
@@ -35,7 +23,6 @@ class HadethDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Image.asset(AssetsManger.leftCorner),
-
                     Image.asset(AssetsManger.rightCorner),
                   ],
                 ),

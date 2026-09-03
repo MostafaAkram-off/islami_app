@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:islami_app/core/local/text_assets.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
-import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/core/utils/arabic_numbers.dart';
@@ -46,14 +45,7 @@ class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
   Widget build(BuildContext context) {
     SuraModel sura = ModalRoute.of(context)!.settings.arguments as SuraModel;
     return Scaffold(
-      backgroundColor: ColorsManger.blackColor,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: ColorsManger.goldColor),
-        centerTitle: true,
-        title: Text(sura.suraNameEn, style: TextStyles.smallTitleTextStyle()),
-      ),
+      appBar: AppBar(title: Text(sura.suraNameEn)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0),
         child: Column(
@@ -84,9 +76,7 @@ class _SuraDetailsScreenState extends State<SuraDetailsScreen> {
       );
     }
     if (suraVerses.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: ColorsManger.goldColor),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
     return SingleChildScrollView(
       child: Text(
