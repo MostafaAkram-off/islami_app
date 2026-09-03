@@ -25,7 +25,7 @@
 | **Hadith** | Fifty hadith in a swipeable card deck, each opening to the full text |
 | **Sebha** | A digital tasbeeh that turns bead by bead, cycles the four adhkar every 33 counts and remembers where you stopped |
 | **Radio** | Live Quran radio stations and reciters streamed from mp3quran, with play and mute per station |
-| **Prayer times** | Today's five prayers for your city, the next one highlighted with a live countdown, plus the gregorian and hijri date |
+| **Prayer times** | Today's five prayers for wherever you are, the next one highlighted with a live countdown, plus the gregorian and hijri date |
 | **Azkar** | The morning and evening supplications with a per-zekr counter, repeat targets and session progress |
 
 <div align="center">
@@ -48,11 +48,11 @@ flutter pub get
 flutter run
 ```
 
-Prayer times default to Cairo, Egypt. To change the city, edit the two constants at the top of [`lib/core/api/api_manager.dart`](lib/core/api/api_manager.dart):
+Prayer times use the device location. Granting it is optional — if location is off or the permission is denied, the app falls back to the city set in [`lib/core/api/api_manager.dart`](lib/core/api/api_manager.dart):
 
 ```dart
-static const String city = "cairo";
-static const String country = "egypt";
+static const String fallbackCity = "cairo";
+static const String fallbackCountry = "egypt";
 ```
 
 ## Tech stack
@@ -64,6 +64,7 @@ static const String country = "egypt";
 | **Networking** | [`dio`](https://pub.dev/packages/dio) |
 | **Audio** | [`just_audio`](https://pub.dev/packages/just_audio) |
 | **Storage** | [`shared_preferences`](https://pub.dev/packages/shared_preferences) |
+| **Location** | [`geolocator`](https://pub.dev/packages/geolocator) |
 | **Vector assets** | [`flutter_svg`](https://pub.dev/packages/flutter_svg) |
 | **Splash** | [`flutter_native_splash`](https://pub.dev/packages/flutter_native_splash) |
 
@@ -73,7 +74,8 @@ The Quran text, the hadith and the azkar ship with the app as assets, so everyth
 
 | Purpose | Endpoint |
 |---|---|
-| Prayer times | `GET https://api.aladhan.com/v1/timingsByCity/{dd-MM-yyyy}?city={city}&country={country}` |
+| Prayer times | `GET https://api.aladhan.com/v1/timings/{dd-MM-yyyy}?latitude={lat}&longitude={lon}&method=5` |
+| Prayer times (fallback) | `GET https://api.aladhan.com/v1/timingsByCity/{dd-MM-yyyy}?city={city}&country={country}` |
 | Radio stations | `GET https://www.mp3quran.net/api/v3/radios?language=en` |
 | Reciters | `GET https://www.mp3quran.net/api/v3/reciters?language=en` |
 

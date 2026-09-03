@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/core/resources/colors_manger.dart';
+import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/ui/home/tabs/radio/widgets/sound_wave.dart';
 
@@ -35,16 +36,19 @@ class RadioItem extends StatelessWidget {
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          isPlaying
-              ? const SoundWave(height: 97)
-              : Image.asset(
-                  AssetsManger.radioCardMosque,
-                  height: 97,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  color: ColorsManger.brownColor.withValues(alpha: 0.35),
-                  colorBlendMode: BlendMode.srcIn,
-                ),
+          // خلفية زخرفية، القارئ الآلي ميقراهاش
+          ExcludeSemantics(
+            child: isPlaying
+                ? const SoundWave(height: 97)
+                : Image.asset(
+                    AssetsManger.radioCardMosque,
+                    height: 97,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    color: ColorsManger.brownColor.withValues(alpha: 0.35),
+                    colorBlendMode: BlendMode.srcIn,
+                  ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             child: Column(
@@ -64,6 +68,9 @@ class RadioItem extends StatelessWidget {
                   spacing: 12,
                   children: [
                     IconButton(
+                      tooltip: isPlaying
+                          ? "${StringsManger.pause} $title"
+                          : "${StringsManger.play} $title",
                       onPressed: () {
                         HapticFeedback.lightImpact();
                         onPlayPressed();
@@ -81,6 +88,9 @@ class RadioItem extends StatelessWidget {
                       ),
                     ),
                     IconButton(
+                      tooltip: isMuted
+                          ? StringsManger.unmute
+                          : StringsManger.mute,
                       onPressed: onMutePressed,
                       icon: Icon(
                         isMuted ? Icons.volume_off : Icons.volume_up,

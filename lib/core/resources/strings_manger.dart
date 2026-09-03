@@ -49,6 +49,14 @@ abstract class StringsManger {
 
   static const String reciters = "Reciters";
 
+  static const String play = "Play";
+  static const String pause = "Pause";
+  static const String mute = "Mute";
+  static const String unmute = "Unmute";
+  static const String countZekr = "Count this zekr";
+  static const String countTasbeeh = "Count a tasbeeh";
+  static const String outOf = "of";
+
   static const String reset = "Reset";
   static const String completed = "Completed";
 }

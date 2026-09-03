@@ -160,6 +160,7 @@ class _PrayTimeCardState extends State<PrayTimeCard> {
             ),
           ),
           IconButton(
+            tooltip: isMuted ? StringsManger.unmute : StringsManger.mute,
             onPressed: () => setState(() => isMuted = !isMuted),
             icon: Icon(
               isMuted ? Icons.volume_off : Icons.volume_up,
