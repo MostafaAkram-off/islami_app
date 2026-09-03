@@ -3,21 +3,31 @@ import 'package:islami_app/core/resources/assets_manger.dart';
 import 'package:islami_app/ui/home/tabs/hadeth/widgets/hadeth_item.dart';
 
 class HadethTab extends StatefulWidget {
+  const HadethTab({super.key});
+
   @override
   State<HadethTab> createState() => _HadethTabState();
 }
 
 class _HadethTabState extends State<HadethTab> {
-  PageController pageController=PageController(viewportFraction: 0.8);
+  /// عدد ملفات الأحاديث الموجودة في assets/Hadeeth
+  static const int hadethCount = 50;
 
-  int selectedIndex=0;
+  final PageController pageController = PageController(viewportFraction: 0.8);
+  int selectedIndex = 0;
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage(AssetsManger.hadethBack),
           alignment: Alignment.topCenter,
@@ -37,16 +47,13 @@ class _HadethTabState extends State<HadethTab> {
               Expanded(
                 child: PageView.builder(
                   reverse: true,
-                  onPageChanged: (index){
-                    setState(() {
-                      selectedIndex=index;
-                    });
-                  },
                   controller: pageController,
-                  itemCount: 50,
+                  itemCount: hadethCount,
+                  onPageChanged: (index) =>
+                      setState(() => selectedIndex = index),
                   itemBuilder: (context, index) => HadethItem(
-                    isSelected: selectedIndex==index,
-                    hadethNumber: index+1,
+                    isSelected: selectedIndex == index,
+                    hadethNumber: index + 1,
                   ),
                 ),
               ),

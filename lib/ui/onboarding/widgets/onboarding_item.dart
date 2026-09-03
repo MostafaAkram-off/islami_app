@@ -16,10 +16,7 @@ class OnboardingItem extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 16),
-        Image.asset(
-          AssetsManger.imageHeader,
-          height: screenHeight * 0.14,
-        ),
+        Image.asset(AssetsManger.imageHeader, height: screenHeight * 0.14),
         const Spacer(),
         Image.asset(
           model.imagePath,

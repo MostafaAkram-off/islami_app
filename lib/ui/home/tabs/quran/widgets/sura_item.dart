@@ -16,7 +16,11 @@ class SuraItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         onClick();
-        Navigator.pushNamed(context, RoutesManger.suraDetailsRouteName,arguments: sura);
+        Navigator.pushNamed(
+          context,
+          RoutesManger.suraDetailsRouteName,
+          arguments: sura,
+        );
       },
       child: Row(
         children: [

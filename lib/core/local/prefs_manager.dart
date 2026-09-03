@@ -16,10 +16,13 @@ class PrefsManager {
     return preferences.getBool("is_onboarding_viewed") ?? false;
   }
 
-  static saveMostRecent(List<SuraModel> mostRecent) {
+  /// أقصى عدد سور بيتحفظ في "Most Recently"
+  static const int mostRecentLimit = 10;
+
+  static void saveMostRecent(List<SuraModel> mostRecent) {
     preferences.setStringList(
       "most_recent",
-      mostRecent.map((sura) => sura.suraNameEn).toList(),
+      mostRecent.take(mostRecentLimit).map((sura) => sura.suraNameEn).toList(),
     );
   }
 
@@ -37,14 +40,15 @@ class PrefsManager {
   }
 
   static List<SuraModel> getMostRecent() {
-    List<String> mostRecentString =
-        preferences.getStringList("most_recent") ?? [];
+    List<String> savedNames = preferences.getStringList("most_recent") ?? [];
     List<SuraModel> mostRecent = [];
-    for (int i = 0; i < mostRecentString.length; i++) {
-      SuraModel sura = SuraModel.surasList.firstWhere(
-        (sura) => sura.suraNameEn == mostRecentString[i],
+    for (String name in savedNames) {
+      // اسم مش موجود في الليست معناه إن البيانات المحفوظة قديمة، فبنتخطاه
+      // بدل ما firstWhere ترمي exception وتوقع التاب
+      int index = SuraModel.surasList.indexWhere(
+        (sura) => sura.suraNameEn == name,
       );
-      mostRecent.add(sura);
+      if (index != -1) mostRecent.add(SuraModel.surasList[index]);
     }
     return mostRecent;
   }

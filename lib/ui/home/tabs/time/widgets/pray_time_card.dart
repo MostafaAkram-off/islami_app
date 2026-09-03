@@ -3,6 +3,7 @@ import 'package:islami_app/core/resources/colors_manger.dart';
 import 'package:islami_app/core/resources/strings_manger.dart';
 import 'package:islami_app/core/resources/text_styles.dart';
 import 'package:islami_app/model/pray_time_model.dart';
+import 'package:islami_app/ui/home/tabs/time/widgets/next_pray_countdown.dart';
 import 'package:islami_app/ui/home/tabs/time/widgets/prayer_item.dart';
 
 /// الكارت الدهبي اللي فيه التاريخ والمواقيت والوقت الفاضل على الصلاة الجاية
@@ -49,13 +50,6 @@ class _PrayTimeCardState extends State<PrayTimeCard> {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeOut,
     );
-  }
-
-  /// بيحول المدة الفاضلة لـ "02:32:15"
-  String formatRemaining(Duration duration) {
-    String twoDigits(int value) => value.toString().padLeft(2, '0');
-    return "${twoDigits(duration.inHours)}:${twoDigits(duration.inMinutes % 60)}"
-        ":${twoDigits(duration.inSeconds % 60)}";
   }
 
   @override
@@ -158,12 +152,11 @@ class _PrayTimeCardState extends State<PrayTimeCard> {
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              "${StringsManger.nextPray} - ${formatRemaining(prayTime.timeToNextPrayer)}",
-              textAlign: TextAlign.center,
-              style: TextStyles.mediumLabelTextStyle(
-                textColor: ColorsManger.blackColor,
-              ),
+            child: NextPrayCountdown(
+              prayTime: prayTime,
+              onNextPrayerChanged: () {
+                setState(scrollToNextPrayer);
+              },
             ),
           ),
           IconButton(
